@@ -1,0 +1,28 @@
+{
+  "name": "koenvh/rpki",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Koen",
+      "email": "koen@koenvh.nl"
+    }
+  ],
+  "require": {
+    "miladrahimi/phprouter": "5.*",
+    "ramsey/uuid": "^4.1",
+    "ext-xmlwriter": "*",
+    "ext-bcmath": "*",
+    "ext-gmp": "*",
+    "fgrosse/phpasn1": "^2.3"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4"
+    }
+  },
+  "autoload": {
+    "psr-4": {"koenvh\\RPKI\\": "app/"}
+  }
+}
