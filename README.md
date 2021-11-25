@@ -1,5 +1,5 @@
-Relying Party Resiliency Project
-================================
+Relying Party Resiliency Platform
+=================================
 The aim of this repository is to experiment with RPKI repositories and certificate authorities,
 especially with the focus of causing unintended behaviour on relying party clients.
 
