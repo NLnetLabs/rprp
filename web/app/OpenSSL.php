@@ -66,6 +66,7 @@ subjectInfoAccess=1.3.6.1.5.5.7.48.10;URI:rsync://%URL%/repository/%NAME%.mft,1.
 certificatePolicies=critical,1.3.6.1.5.5.7.14.2
 sbgp-ipAddrBlock=critical,IPv4.0:0.0.0.0/0,IPv6.0:::/0
 sbgp-autonomousSysNum=critical,AS.0:0-4294967295
+#1.3.6.1.5.5.7.1.45=critical,DER:02012A
 EOD;
 
     private const SIGNING_CERTIFICATE_CONFIG = <<<'EOD'
@@ -409,7 +410,7 @@ EOD;
             $binaryAddress = base_convert($binaryAddress, 2, 16);
 
             $ip4Addresses[] = new Sequence(
-                new BitString($binaryAddress, $unusedBits) // address
+                new BitString($binaryAddress, $unusedBits), // address
             );
         }
 

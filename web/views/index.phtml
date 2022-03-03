@@ -57,77 +57,77 @@
         <tr>
             <td>A</td>
             <td>This repository contains a certificate that points to a repository ad infinitum.</td>
-            <td><a href="https://a-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-A.tal">Download the TAL</a></td>
+            <td><a href="https://a-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-A.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>B</td>
             <td>This repository returns a 429 response with a 1 day (86400 seconds) Retry-After value as header.</td>
-            <td><a href="https://b-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-B.tal">Download the TAL</a></td>
+            <td><a href="https://b-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-B.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>C</td>
             <td>This repository returns a 302 response with a redirect that never stops redirecting, but does not loop.</td>
-            <td><a href="https://c-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-C.tal">Download the TAL</a></td>
+            <td><a href="https://c-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-C.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>D</td>
             <td>This repository returns a gzip bomb, which is not valid XML.</td>
-            <td><a href="https://d-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-D.tal">Download the TAL</a></td>
+            <td><a href="https://d-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-D.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>E</td>
             <td>This repository keeps the connection open for a day before a response is returned, but does keep drip feeding new bytes to keep the connection alive.</td>
-            <td><a href="https://e-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-E.tal">Download the TAL</a></td>
+            <td><a href="https://e-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-E.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>F</td>
             <td>This repository serves a broken ROA with only an ASCII NUL character.</td>
-            <td><a href="https://f-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-F.tal">Download the TAL</a></td>
+            <td><a href="https://f-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-F.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>G</td>
             <td>This repository serves a billion laughs attack.</td>
-            <td><a href="https://g-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-G.tal">Download the TAL</a></td>
+            <td><a href="https://g-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-G.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>H</td>
             <td>This repository is both wide and deep (every child has 9 children).</td>
-            <td><a href="https://h-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-H.tal">Download the TAL</a></td>
+            <td><a href="https://h-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-H.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>I</td>
             <td>This repository contains a ROA that does not meet the requirements of a ROA.</td>
-            <td><a href="https://i-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-I.tal">Download the TAL</a></td>
+            <td><a href="https://i-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-I.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>J</td>
             <td>This repository contains ~2200 ROAs for one prefix, all with a different ASN. (Generating all ROAs takes ~10 minutes)</td>
-            <td><a href="https://j-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-J.tal">Download the TAL</a></td>
+            <td><a href="https://j-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-J.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>K</td>
             <td>This repository contains one ROA for 2200 prefixes, all with the same ASN.</td>
-            <td><a href="https://k-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-K.tal">Download the TAL</a></td>
+            <td><a href="https://k-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-K.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>L</td>
             <td>This repository links to 100 GiB of random data.</td>
-            <td><a href="https://l-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-L.tal">Download the TAL</a></td>
+            <td><a href="https://l-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-L.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>M</td>
             <td>This tries an XXE attack on an attribute. This should not be possible, as XXE are not allowed in attributes.</td>
-            <td><a href="https://m-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-M.tal">Download the TAL</a></td>
+            <td><a href="https://m-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-M.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>N</td>
             <td>This contains valid data with a stupendously long path.</td>
-            <td><a href="https://n-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-N.tal">Download the TAL</a></td>
+            <td><a href="https://n-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-N.tal">Download the TAL</a></td>
         </tr>
         <tr>
             <td>O</td>
             <td>This contains valid data with a path that attempts to write to a folder up from where it should.</td>
-            <td><a href="https://o-<?= $uuid; ?>.rpki.koenvh.nl/koenvh-O.tal">Download the TAL</a></td>
+            <td><a href="https://o-<?= $uuid; ?>.<?= DOMAIN; ?>/koenvh-O.tal">Download the TAL</a></td>
         </tr>
         </tbody>
     </table>
@@ -147,7 +147,7 @@
     </p>
 </div>
 <script>
-    fetch("https://ipv6.rpki.koenvh.nl/").then(() => {
+    fetch("https://ipv6.<?= DOMAIN; ?>/").then(() => {
         document.getElementById("ipv6").innerHTML =
             "<strong style='color: green'>It looks like your network supports IPv6.</strong> " +
             "Running these TALs requires IPv6 support. " +

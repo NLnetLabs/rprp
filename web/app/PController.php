@@ -7,19 +7,19 @@ use Laminas\Diactoros\Response;
 use Ramsey\Uuid\Uuid;
 use XMLWriter;
 
-class KController
+class PController
 {
-    private string $domain = "k.rpki.koenvh.nl";
+    private string $domain = "p.rpki.koenvh.nl";
     private string $sessionId = "23e3c698-2ead-4386-b3be-b04b73f364c1";
     private string $serial = "1337";
     private string $state = "1";
 
-    private const VIRUS_GROWTH = 256;
+    private const VIRUS_GROWTH = 2;
     private const DUPLICATES = 1; //125_000;
 
     function __construct() {
         $this->domain = $_SERVER['SERVER_NAME'];
-        preg_match('/k([^-]*)-([^.]+)\./', $this->domain, $matches);
+        preg_match('/p([^-]*)-([^.]+)\./', $this->domain, $matches);
         if ($matches[1]) {
             $this->state = $matches[1];
         }
@@ -110,9 +110,9 @@ class KController
 
             for ($i = 1; $i < self::VIRUS_GROWTH; $i++) {
                 $ipv6 = [];
-                for ($l = 0; $l < pow(2, 2); $l++) {
+                for ($l = 0; $l < pow(2, 0); $l++) {
                     $lHex = str_pad(dechex($l), 4, "0", STR_PAD_LEFT);
-                    for ($k = 0; $k < pow(2, 15); $k++) {
+                    for ($k = 0; $k < pow(2, 0); $k++) {
                         $ipv6[] = "2001:0db9:$lHex:" . str_pad(dechex($k), 4, "0", STR_PAD_LEFT) . ":" . str_pad(dechex($i), 4, "0", STR_PAD_LEFT) . ":0000:0000:0000/64";
                     }
                 }
@@ -169,7 +169,7 @@ class KController
         for ($i = 1; $i < self::VIRUS_GROWTH; $i++) {
             $rawRoa = $openSSL->retrieveRoa($this->domain, $i);
             for ($j = 0; $j < self::DUPLICATES; $j++) {
-                $str = '<publish uri="' . "rsync://$this->domain/repository/koenvh$i-$j.roa" . '">' . $rawRoa . '</publish>' . PHP_EOL;
+                $str = '<publish uri="' . "rsync://rrdp.json/repository/koenvh$i-$j.roa" . '">' . $rawRoa . '</publish>' . PHP_EOL;
                 if ($uniqid == "parent") {
                     hash_update($ctx, $str);
                 } else {
