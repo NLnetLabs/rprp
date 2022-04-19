@@ -3,7 +3,11 @@ Relying Party Resiliency Platform
 The aim of this repository is to experiment with RPKI repositories and certificate authorities,
 especially with the focus of causing unintended behaviour on relying party clients.
 
-Created by Koen van Hove <koen@koenvh.nl>
+The theoretical underpinnings, architecture, etc. can be found here: 
+
+> van Hove, K., van der Ham, J., & van Rijswijk-Deij, R. (2022). Rpkiller: Threat Analysis from an RPKI Relying Party Perspective. arXiv. https://doi.org/10.48550/ARXIV.2203.00993
+
+Created by Koen van Hove (koen@koenvh.nl)
 
 Commands
 --------
