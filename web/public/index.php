@@ -163,13 +163,13 @@ $router->group(["domain" => "p([^-]*)-(.*)." . DOMAIN, "middleware" => [\koenvh\
     $router->any("/{i}/delta.xml", [\koenvh\RPKI\PController::class, "delta"]);
 });
 
-$router->group(["domain" => "p([^-]*)-(.*)." . DOMAIN, "middleware" => [\koenvh\RPKI\DumpHTTPRequest::class]], function(Router $router) {
-    $router->any("/tal.tal", [\koenvh\RPKI\PController::class, "tal"]);
-    $router->any("/koenvh-P.tal", [\koenvh\RPKI\PController::class, "tal"]);
-    $router->any("/ta/ta.cer", [\koenvh\RPKI\PController::class, "cer"]);
-    $router->any("/notification.xml", [\koenvh\RPKI\PController::class, "notification"]);
-    $router->any("/{uniqid}/snapshot.xml", [\koenvh\RPKI\PController::class, "snapshot"]);
-    $router->any("/{i}/delta.xml", [\koenvh\RPKI\PController::class, "delta"]);
+$router->group(["domain" => "q([^-]*)-(.*)." . DOMAIN, "middleware" => [\koenvh\RPKI\DumpHTTPRequest::class]], function(Router $router) {
+    $router->any("/tal.tal", [\koenvh\RPKI\QController::class, "tal"]);
+    $router->any("/koenvh-Q.tal", [\koenvh\RPKI\QController::class, "tal"]);
+    $router->any("/ta/ta.cer", [\koenvh\RPKI\QController::class, "cer"]);
+    $router->any("/notification.xml", [\koenvh\RPKI\QController::class, "notification"]);
+    $router->any("/{uniqid}/snapshot.xml", [\koenvh\RPKI\QController::class, "snapshot"]);
+    $router->any("/{i}/delta.xml", [\koenvh\RPKI\QController::class, "delta"]);
 });
 
 try {
