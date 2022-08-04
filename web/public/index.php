@@ -11,7 +11,7 @@ require_once "../vendor/autoload.php";
 $router = Router::create();
 $router->setupView("../views");
 
-$router->group(["domain" => DOMAIN, "middleware" => [\koenvh\RPKI\AuthRequest::class]], function(Router $router) {
+$router->group(["domain" => DOMAIN], function(Router $router) {
     $router->any("/", function (View $view) {
         $uuid = Uuid::uuid4();
         return new \Laminas\Diactoros\Response\RedirectResponse("/$uuid");
