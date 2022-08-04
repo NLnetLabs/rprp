@@ -463,10 +463,10 @@ EOD;
         return $this->sign($binary, $privateKey, $url, "1.2.840.113549.1.9.16.1.24", $oldUrl, $name, $oldName)[0];
     }
 
-    public function generateAspa($asn, $asns, $privateKey, $url, $oldUrl = null, $name = "koenvh", $oldName = null) {
+    public function generateAspa($customerAsn, $asns, $privateKey, $url, $oldUrl = null, $name = "koenvh", $oldName = null) {
         $providers = [];
         
-        for ($asns as $asn) {
+        foreach ($asns as $asn) {
             switch ($asn["type"]) {
                 case "ipv4":
                     $providers[] = new Sequence(
@@ -489,7 +489,7 @@ EOD;
         }
 
         $aspa = new Sequence(
-            new Integer($asn), // customerASID
+            new Integer($customerAsn), // customerASID
             new Sequence( //providers
                 ...$providers
             )

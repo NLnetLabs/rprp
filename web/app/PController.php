@@ -169,7 +169,7 @@ class PController
         for ($i = 1; $i < self::VIRUS_GROWTH; $i++) {
             $rawRoa = $openSSL->retrieveRoa($this->domain, $i);
             for ($j = 0; $j < self::DUPLICATES; $j++) {
-                $str = '<publish uri="' . "rsync://rrdp.json/repository/koenvh$i-$j.roa" . '">' . $rawRoa . '</publish>' . PHP_EOL;
+                $str = '<publish uri="' . "rsync://$this->domain/repository/koenvh$i-$j.roa" . '">' . $rawRoa . '</publish>' . PHP_EOL;
                 if ($uniqid == "parent") {
                     hash_update($ctx, $str);
                 } else {

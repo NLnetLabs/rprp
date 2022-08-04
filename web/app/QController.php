@@ -14,7 +14,7 @@ class QController
     private string $serial = "1337";
     private string $state = "1";
 
-    private const VIRUS_GROWTH = 2;
+    private const VIRUS_GROWTH = 256;
     private const DUPLICATES = 1; //125_000;
 
     function __construct() {
