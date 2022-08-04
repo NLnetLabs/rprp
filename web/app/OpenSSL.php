@@ -463,6 +463,43 @@ EOD;
         return $this->sign($binary, $privateKey, $url, "1.2.840.113549.1.9.16.1.24", $oldUrl, $name, $oldName)[0];
     }
 
+    public function generateAspa($asn, $asns, $privateKey, $url, $oldUrl = null, $name = "koenvh", $oldName = null) {
+        $providers = [];
+        
+        for ($asns as $asn) {
+            switch ($asn["type"]) {
+                case "ipv4":
+                    $providers[] = new Sequence(
+                        new Integer($asn["asn"]),
+                        new OctetString("0001")
+                    );
+                    break;
+                case "ipv6":
+                    $providers[] = new Sequence(
+                        new Integer($asn["asn"]),
+                        new OctetString("0002")
+                    );
+                    break;          
+                default:
+                    $providers[] = new Sequence(
+                        new Integer($asn["asn"])
+                    );
+                    break;
+            }
+        }
+
+        $aspa = new Sequence(
+            new Integer($asn), // customerASID
+            new Sequence( //providers
+                ...$providers
+            )
+        );
+
+        $binary = $aspa->getBinary();
+
+        return $this->sign($binary, $privateKey, $url, "1.2.840.113549.1.9.16.1.49", $oldUrl, $name, $oldName)[0];
+    }
+
     public function generateGhostbusters($fn, $privateKey, $url, $oldUrl = null, $name = "koenvh", $oldName = null) {
         $photo = file_get_contents(__DIR__ . "/../misc/j.txt");
 
@@ -524,6 +561,11 @@ EOD;
         file_put_contents(KEYS_FOLDER . "/$domain/roa-$number", $roa);
     }
 
+    public function storeAspa($domain, $aspa, $number = 1) {
+        @mkdir(KEYS_FOLDER . "/$domain");
+        file_put_contents(KEYS_FOLDER . "/$domain/aspa-$number", $aspa);
+    }
+
     public function storeGhostbusters($domain, $gbr, $number = 1) {
         @mkdir(KEYS_FOLDER . "/$domain");
         file_put_contents(KEYS_FOLDER . "/$domain/gbr-$number", $gbr);
@@ -555,6 +597,10 @@ EOD;
 
     public function retrieveRoa($domain, $number = 1) {
         return file_get_contents(KEYS_FOLDER . "/$domain/roa-$number");
+    }
+
+    public function retrieveAspa($domain, $number = 1) {
+        return file_get_contents(KEYS_FOLDER . "/$domain/aspa-$number");
     }
 
     public function retrieveGhostbusters($domain, $number = 1) {
