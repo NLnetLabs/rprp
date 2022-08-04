@@ -14,7 +14,7 @@ class QController
     private string $serial = "1337";
     private string $state = "1";
 
-    private const VIRUS_GROWTH = 256;
+    private const VIRUS_GROWTH = 2;
     private const DUPLICATES = 1; //125_000;
 
     function __construct() {
@@ -111,13 +111,18 @@ class QController
             for ($i = 1; $i < self::VIRUS_GROWTH; $i++) {
                 $asns = [];
                 for ($l = 0; $l < pow(2, 16); $l++) {
-                    $type = "all";
-                    if ($l % 4 == 0) {
+                    $type = null;
+                    if ($l % 3 == 0 && $l % 5 == 0) {
+                        $type = "all";
+                    } elseif ($l % 3 == 0) {
                         $type = "ipv4";
-                    } elseif ($l % 6 == 0) {
+                    } elseif ($l % 5 == 0) {
                         $type = "ipv6";
                     }
-                    $asns[] = ["asn" => $l, "type" => $type];
+
+                    if ($type) {
+                        $asns[] = ["asn" => $l, "type" => $type];
+                    }
                 }
                 $aspa = $openSSL->generateAspa($i, $asns, $openSSL->retrievePrivateKey($this->domain), $this->domain, $this->domain, "koenvh$i-0", "koenvh");
                 $openSSL->storeAspa($this->domain, $aspa, $i);
