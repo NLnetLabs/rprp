@@ -152,6 +152,47 @@ certificatePolicies=critical,1.3.6.1.5.5.7.14.2
 sbgp-ipAddrBlock=critical,IPv4.0:0.0.0.0/0,IPv6.0:2001::/8
 EOD;
 
+    private const ASPA_CERTIFICATE_CONFIG = <<<'EOD'
+[ ca ]
+default_ca	= CA_default		# The default ca section
+
+[ CA_default ]
+database = /var/cert/index.txt
+crlnumber = /var/cert/crl_number
+crl_extensions	= crl_ext
+
+default_days	= 365			# how long to certify for
+default_crl_days= 30			# how long before next CRL
+default_md	= default		# use public key default MD
+preserve	= no			# keep passed DN ordering
+
+[ req ]
+default_md = sha256
+default_bits = 2048
+encrypt_key = no
+distinguished_name = req_dn
+x509_extensions = v3_req
+string_mask = pkix
+prompt = no
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid:always
+
+[ req_dn ]
+CN = %CN%
+
+[ v3_req ]
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always
+keyUsage=critical,digitalSignature
+crlDistributionPoints=URI:rsync://%OLDURL%/repository/%OLDNAME%.crl
+authorityInfoAccess=caIssuers;URI:rsync://%OLDURL%/repository/%OLDNAME%.cer
+subjectInfoAccess=1.3.6.1.5.5.7.48.11;URI:rsync://%URL%/repository/%NAME%.asa
+certificatePolicies=critical,1.3.6.1.5.5.7.14.2
+
+sbgp-ipAddrBlock=critical,IPv4.0:0.0.0.0/0,IPv6.0:2001::/8
+EOD;
+
 
     public function generateCertificate($url, &$certificate, &$privateKey, $ca = true, $oldUrl = null, $name = "koenvh", $oldName = "koenvh") {
         if (!$ca && $oldUrl == null) {
@@ -250,6 +291,9 @@ EOD;
 
         if ($contentType == "1.2.840.113549.1.9.16.1.24") {
             $config = self::ROA_CERTIFICATE_CONFIG;
+            $config = str_replace("%CN%", Uuid::uuid4(), $config);
+        } elseif ($contentType == "1.2.840.113549.1.9.16.1.49") {
+            $config = self::ASPA_CERTIFICATE_CONFIG;
             $config = str_replace("%CN%", Uuid::uuid4(), $config);
         } else {
             $config = self::SIGNING_CERTIFICATE_CONFIG;
