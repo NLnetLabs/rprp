@@ -111,6 +111,48 @@ certificatePolicies=critical,1.3.6.1.5.5.7.14.2
 1.3.6.1.5.5.7.1.8=critical,DER:3004A0020500
 EOD;
 
+    private const GBR_CERTIFICATE_CONFIG = <<<'EOD'
+[ ca ]
+default_ca	= CA_default		# The default ca section
+
+[ CA_default ]
+database = /var/cert/index.txt
+crlnumber = /var/cert/crl_number
+crl_extensions	= crl_ext
+
+default_days	= 365			# how long to certify for
+default_crl_days= 30			# how long before next CRL
+default_md	= default		# use public key default MD
+preserve	= no			# keep passed DN ordering
+
+[ req ]
+default_md = sha256
+default_bits = 2048
+encrypt_key = no
+distinguished_name = req_dn
+x509_extensions = v3_req
+string_mask = pkix
+prompt = no
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid:always
+
+[ req_dn ]
+CN = %CN%
+
+[ v3_req ]
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always
+keyUsage=critical,digitalSignature
+crlDistributionPoints=URI:rsync://%OLDURL%/repository/%OLDNAME%.crl
+authorityInfoAccess=caIssuers;URI:rsync://%OLDURL%/repository/%OLDNAME%.cer
+subjectInfoAccess=1.3.6.1.5.5.7.48.11;URI:rsync://%URL%/repository/%NAME%.gbr
+certificatePolicies=critical,1.3.6.1.5.5.7.14.2
+
+1.3.6.1.5.5.7.1.7=critical,DER:301030060402000105003006040200020500
+1.3.6.1.5.5.7.1.8=critical,DER:3004A0020500
+EOD;
+
     private const ROA_CERTIFICATE_CONFIG = <<<'EOD'
 [ ca ]
 default_ca	= CA_default		# The default ca section
@@ -291,6 +333,9 @@ EOD;
 
         if ($contentType == "1.2.840.113549.1.9.16.1.24") {
             $config = self::ROA_CERTIFICATE_CONFIG;
+            $config = str_replace("%CN%", Uuid::uuid4(), $config);
+        } elseif ($contentType == "1.2.840.113549.1.9.16.1.35") {
+            $config = self::GBR_CERTIFICATE_CONFIG;
             $config = str_replace("%CN%", Uuid::uuid4(), $config);
         } elseif ($contentType == "1.2.840.113549.1.9.16.1.49") {
             $config = self::ASPA_CERTIFICATE_CONFIG;
@@ -555,7 +600,7 @@ EOD;
         $gbr .= "TEL;TYPE=VOICE,TEXT,WORK;VALUE=uri:tel:+1-666-555-1212\n";
         $gbr .= "TEL;TYPE=FAX,WORK;VALUE=uri:tel:+1-666-555-1213\n";
         $gbr .= "EMAIL:human@example.com\n";
-        $gbr .= "PHOTO;ENCODING=b;TYPE=image/png:$photo\n";
+//        $gbr .= "PHOTO;ENCODING=b;TYPE=image/png:$photo\n";
         $gbr .= "END:VCARD\n";
 
         $binary = $gbr;
