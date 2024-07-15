@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 
 import base64
 import ipaddress
@@ -16,7 +16,7 @@ import requests
 ip = ""
 host = ""
 base_folder = ""
-prefix_length = 56
+prefix_length = 64
 
 def start():
     try:
@@ -29,7 +29,7 @@ def start():
             return
         elif os.path.exists(f"{base_folder}/{host}/rsyncd.pid"):
             pid = open(f"{base_folder}/{host}/rsyncd.pid", "r").read()
-            if psutil.pid_exists(pid):
+            if psutil.pid_exists(int(pid)):
                 return
 
         shutil.rmtree(f"{base_folder}/{host}")
@@ -46,13 +46,13 @@ port = 873
 
 [repository]
 path = {base_folder}/{host}/repository
-comment = rpki.koenvh.nl dummy rsync daemon
+comment = rprp.nlnetlabs.net dummy rsync daemon
 read only = true
 timeout = 300
 
 [ta]
 path = {base_folder}/{host}/ta
-comment = rpki.koenvh.nl dummy rsync daemon
+comment = rprp.nlnetlabs.net dummy rsync daemon
 read only = true
 timeout = 300
 """
@@ -94,7 +94,7 @@ def stop():
 if __name__ == "__main__":
     ip = sys.argv[2]
     base_folder = "/var/rpki/rsync"
-    # We have a /56, so we only care about the last 72 bits
+    # We have a /64, so we only care about the last 64 bits
     ip_id = '{:#b}'.format(ipaddress.IPv6Address(ip))[(128 - prefix_length) + 2:]
     ip_id = int(ip_id, 2)
 
@@ -102,6 +102,8 @@ if __name__ == "__main__":
     cursor = connection.cursor()
     cursor.execute("SELECT host FROM rsync WHERE rowid=:id", {"id": ip_id})
     host = cursor.fetchone()[0]
+
+    print(host)
 
     if sys.argv[1] == "start":
         start()

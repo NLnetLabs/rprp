@@ -8,7 +8,7 @@ use XMLWriter;
 
 class BController
 {
-    private string $domain = "b.rpki.koenvh.nl";
+    private string $domain = "b.rprp.nlnetlabs.net";
     private string $sessionId = "23e3c698-2ead-4386-b3be-b04b73f364c1";
     private string $serial = "1337";
     private int $number = 1;

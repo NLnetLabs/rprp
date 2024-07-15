@@ -9,7 +9,7 @@ use XMLWriter;
 
 class AController
 {
-    private string $domain = "a.rpki.koenvh.nl";
+    private string $domain = "a.rprp.nlnetlabs.net";
     private string $sessionId = "23e3c698-2ead-4386-b3be-b04b73f364c1";
     private string $serial = "1337";
     private int $number = 1;

@@ -1,5 +1,5 @@
 <?php
-const DOMAIN = "rpki.koenvh.nl";
+const DOMAIN = "rprp.nlnetlabs.net";
 
 const TEMP_FOLDER = "/var/rpki/tmp";
 const KEYS_FOLDER = "/var/rpki/keys";

@@ -5,7 +5,7 @@ RPRP consists of roughly four components.
 
 The server itself runs Ubuntu Server 20.04, and has a /56 associated with it, along with a single IPv6 and IPv4 address that fall outside of that /56 range. A somewhat large IPv6 range is required (although /64 suffices). It must be possible to bind to all these addresses. Pretty much everything is stored inside /var/rpki.
 
-Component 1 is a standard PHP website running behind Apache. No database required. `web/public/index.php` is the main access point. Has a Let's Encrypt certificate for rpki.koenvh.nl and *.rpki.koenvh.nl. Apache should bind to all interfaces. It uses OpenSSL to generate all certificates and signed objects. It uses `faketime` to make sure those certificates are generated one hour in the past. The PHPASN1 dependency has been slightly edited to increase performance and decrease memory usage - just use the dependencies as-is. `/var/rpki/requests` has directory listing enabled for the subfolders (thus not for `/var/rpki/requests`, but only for `/var/rpki/requests/a` etc.), and is accessible from https://rpki.koenvh.nl/data/some-uuid4/ 
+Component 1 is a standard PHP website running behind Apache. No database required. `web/public/index.php` is the main access point. Has a Let's Encrypt certificate for rprp.nlnetlabs.net and *.rprp.nlnetlabs.net. Apache should bind to all interfaces. It uses OpenSSL to generate all certificates and signed objects. It uses `faketime` to make sure those certificates are generated one hour in the past. The PHPASN1 dependency has been slightly edited to increase performance and decrease memory usage - just use the dependencies as-is. `/var/rpki/requests` has directory listing enabled for the subfolders (thus not for `/var/rpki/requests`, but only for `/var/rpki/requests/a` etc.), and is accessible from https://rprp.nlnetlabs.net/data/some-uuid4/ 
 ```
 php
 php-bcmath
@@ -14,7 +14,7 @@ php-json
 php-xml
 ```
 
-Component 2 is an authoritative PowerDNS server with a custom backend, found in `rsync/dns.py` and `rsync/pdns.conf`. It connects to a SQLite database with one table `rsync` with only one column `host`. If, for example, abc.rpki.koenvh.nl is requested, the AAAA record it returns will be the prefix with the row number as suffix. If the address is not yet known, then a new row will be inserted first. This backend requires Python 3.9 (or higher). Lower version do not support the necessary IP address operations.
+Component 2 is an authoritative PowerDNS server with a custom backend, found in `rsync/dns.py` and `rsync/pdns.conf`. It connects to a SQLite database with one table `rsync` with only one column `host`. If, for example, abc.rprp.nlnetlabs.net is requested, the AAAA record it returns will be the prefix with the row number as suffix. If the address is not yet known, then a new row will be inserted first. This backend requires Python 3.9 (or higher). Lower version do not support the necessary IP address operations.
 
 Component 3 is a modified version of knockd, found in `knockd/knockd` (with config `knockd/knockd.conf`). iptables drops all incoming packets on port 873 (rsync daemon default port). Knockd still receives this packet, and starts the manager
 ```

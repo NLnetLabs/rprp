@@ -2,11 +2,11 @@
   "name": "koenvh/rpki",
   "description": "description",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "AGPLv3",
   "authors": [
     {
       "name": "Koen",
-      "email": "koen@koenvh.nl"
+      "email": "koen@nlnetlabs.nl"
     }
   ],
   "require": {
