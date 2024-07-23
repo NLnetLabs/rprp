@@ -7,6 +7,7 @@ Requires Python 3.9 or higher!
 import ipaddress
 import sqlite3
 import sys
+import syslog
 
 
 base_folder = "/var/rpki/rsync"
@@ -28,10 +29,12 @@ letsencrypt_keys = [
 def stdin():
     line = sys.stdin.readline()
     line = line.strip()
+    syslog.syslog(line)
     return line.split("\t")
 
 def stdout(text):
     text = "\t".join(text) + "\n"
+    syslog.syslog(text)
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -41,14 +44,15 @@ if __name__ == "__main__":
 
     while True:
         query = stdin()
+        
         if query[0] == "CMD":
             stdout(["END"])
         elif query[0] == "Q":
             (_, qname, qclass, qtype, id, remote_ip_address) = query
 
-            if qtype == "SOA":
+            if qtype == "SOA" or qtype == "ANY":
                 stdout(["DATA", qname, "IN", "SOA", "300", "1", "rprp-ns1.nlnetlabs.net. koen.nlnetlabs.nl 2008080300 1800 3600 604800 3600"])
-            elif qname == default_domain:
+            if qname.lower() == default_domain:
                 if qtype == "A" or qtype == "ANY":
                     stdout(["DATA", qname, "IN", "A", "300", "1", str(default_ipv4)])
                 if qtype == "AAAA" or qtype == "ANY":
@@ -56,11 +60,11 @@ if __name__ == "__main__":
                 if qtype == "NS" or qtype == "ANY":
                     for ns in default_ns:
                         stdout(["DATA", qname, "IN", "NS", "300", "1", str(ns)])   
-            elif qname == "_acme-challenge." + default_domain:
+            if qname.lower() == "_acme-challenge." + default_domain:
                 if qtype == "TXT" or qtype == "ANY":
                     for key in letsencrypt_keys:
                         stdout(["DATA", qname, "IN", "TXT", "60", "1", f"\"{key}\""])
-            elif (qtype == "AAAA" or qtype == "ANY") and default_domain in qname:
+            if (qtype == "AAAA" or qtype == "ANY") and default_domain in qname.lower():
                 connection = sqlite3.connect(f"{base_folder}/rsync.db")
                 cursor = connection.cursor()
                 cursor.execute("INSERT OR IGNORE INTO rsync (host) VALUES (:host);", {"host": qname})
