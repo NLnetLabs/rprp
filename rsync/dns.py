@@ -67,9 +67,9 @@ if __name__ == "__main__":
             if (qtype == "AAAA" or qtype == "ANY") and default_domain in qname.lower():
                 connection = sqlite3.connect(f"{base_folder}/rsync.db")
                 cursor = connection.cursor()
-                cursor.execute("INSERT OR IGNORE INTO rsync (host) VALUES (:host);", {"host": qname})
+                cursor.execute("INSERT OR IGNORE INTO rsync (host) VALUES (:host);", {"host": qname.lower()})
                 connection.commit()
-                cursor.execute("SELECT rowid FROM rsync WHERE host = :host;", {"host": qname})
+                cursor.execute("SELECT rowid FROM rsync WHERE host = :host;", {"host": qname.lower()})
                 ip_id = cursor.fetchone()[0]
 
                 ip_suffix_binary = format(ip_id, f"0{128 - prefix_length}b")
