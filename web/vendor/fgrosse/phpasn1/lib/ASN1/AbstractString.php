@@ -90,9 +90,9 @@ abstract class AbstractString extends ASNObject implements Parsable
 
     protected function getEncodedValue()
     {
-//        if ($this->checkStringForIllegalChars) {
-//            $this->checkString();
-//        }
+        if ($this->checkStringForIllegalChars) {
+            $this->checkString();
+        }
 
         return $this->value;
     }

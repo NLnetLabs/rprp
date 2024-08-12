@@ -11,24 +11,24 @@
     "Dependency",
     "Injection"
   ],
-  "homepage": "http://github.io/miladrahimi/phpcontainer",
+  "homepage": "https://github.io/miladrahimi/phpcontainer",
   "type": "library",
   "license": "MIT",
   "authors": [
     {
       "name": "Milad Rahimi",
-      "email": "info@miladrahimi.com",
+      "email": "i@miladrahimi.com",
       "homepage": "https://miladrahimi.com",
       "role": "Developer"
     }
   ],
   "support": {
-    "email": "info@miladrahimi.com",
+    "email": "i@miladrahimi.com",
     "source": "https://github.com/miladrahimi/phpcontainer/issues"
   },
   "require": {
-    "php": "^7.1|^8.0",
-    "psr/container": "^1.0"
+    "php": ">=7.4",
+    "psr/container": "^2.0"
   },
   "autoload": {
     "psr-4": {

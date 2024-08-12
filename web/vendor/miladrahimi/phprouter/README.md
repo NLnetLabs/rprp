@@ -16,13 +16,13 @@ Some of the provided features:
 * Route groups (by prefix, middleware, and domain)
 * Route naming (and generating route by name)
 * PSR-7 requests and responses
-* Views
+* Views (simple PHP/HTML views)
 * Multiple (sub)domains (using regex patterns)
 * Custom HTTP methods
-* Integrated with an Ioc Container([PhpContainer](https://github.com/miladrahimi/phpcontainer))
-* Method and constructor auto-injection of request, route, url, etc
+* Integrated with an IoC Container ([PhpContainer](https://github.com/miladrahimi/phpcontainer))
+* Method and constructor auto-injection of Request, Route, Url, etc
 
-The current version requires PHP `v7.1` or newer versions including (`v8.0`).
+The current version requires PHP `v7.4` or newer versions including `v8.*`.
 
 ## Contents
 - [Versions](#versions)
@@ -34,28 +34,19 @@ The current version requires PHP `v7.1` or newer versions including (`v8.0`).
     - [Controllers](#controllers)
     - [Route Parameters](#route-parameters)
     - [Requests and Responses](#requests-and-responses)
+    - [Views](#views)
     - [Route Groups](#route-groups)
     - [Middleware](#middleware)
     - [Domains and Subdomains](#domains-and-subdomains)
-    - [Views](#views)
     - [Route Names](#route-names)
     - [Current Route](#current-route)
     - [Error Handling](#error-handling)
 - [License](#license)
 
 ## Versions
-
-Supported versions:
-
-* v5.x.x
+* **v5.x.x** (Current, Supported)
 * v4.x.x
-
-Unsupported versions:
-
 * v3.x.x
-
-Unavailable versions:
-
 * v2.x.x
 * v1.x.x
 
@@ -104,7 +95,7 @@ Here you can see sample configurations for NGINX and Apache HTTP Server.
 
 It's so easy to work with PhpRouter! Just take a look at the following example.
 
-*  API Example:
+*  JSON API Example:
 
     ```php
     use MiladRahimi\PhpRouter\Router;
@@ -144,21 +135,11 @@ use MiladRahimi\PhpRouter\Router;
 
 $router = Router::create();
 
-$router->get('/', function () {
-    return 'GET';
-});
-$router->post('/', function () {
-    return 'POST';
-});
-$router->put('/', function () {
-    return 'PUT';
-});
-$router->patch('/', function () {
-    return 'PATCH';
-});
-$router->delete('/', function () {
-    return 'DELETE';
-});
+$router->get('/', function () { /* ... */ });
+$router->post('/', function () { /* ... */ });
+$router->put('/', function () { /* ... */ });
+$router->patch('/', function () { /* ... */ });
+$router->delete('/', function () { /* ... */ });
 
 $router->dispatch();
 ```
@@ -170,15 +151,9 @@ use MiladRahimi\PhpRouter\Router;
 
 $router = Router::create();
 
-$router->define('GET', '/', function () {
-    return 'GET';
-});
-$router->define('OPTIONS', '/', function () {
-    return 'OPTIONS';
-});
-$router->define('CUSTOM', '/', function () {
-    return 'CUSTOM';
-});
+$router->define('GET', '/', function () { /* ... */ });
+$router->define('OPTIONS', '/', function () { /* ... */ });
+$router->define('CUSTOM', '/', function () { /* ... */ });
 
 $router->dispatch();
 ```
@@ -222,7 +197,7 @@ class UsersController
 {
     function index()
     {
-        return 'Class: UsersController, Method: index';
+        return 'Class: UsersController & Method: index';
     }
 
     function handle()
@@ -257,18 +232,22 @@ $router = Router::create();
 $router->get('/post/{id}', function ($id) {
     return "The content of post $id";
 });
+
 // Optional parameter
 $router->get('/welcome/{name?}', function ($name = null) {
     return 'Welcome ' . ($name ?: 'Dear User');
 });
+
 // Optional parameter, Optional / (Slash)!
 $router->get('/profile/?{user?}', function ($user = null) {
     return ($user ?: 'Your') . ' profile';
 });
+
 // Optional parameter with default value
 $router->get('/roles/{role?}', function ($role = 'guest') {
     return "Your role is $role";
 });
+
 // Multiple parameters
 $router->get('/post/{pid}/comment/{cid}', function ($pid, $cid) {
     return "The comment $cid of the post $pid";
@@ -289,9 +268,7 @@ $router = Router::create();
 // "id" must be numeric
 $router->pattern('id', '[0-9]+');
 
-$router->get('/post/{id}', function (int $id) {
-    return 'Content of the post: ' . $id;
-});
+$router->get('/post/{id}', function (int $id) { /* ... */ });
 
 $router->dispatch();
 ```
@@ -315,15 +292,11 @@ use Laminas\Diactoros\Response\JsonResponse;
 $router = Router::create();
 
 $router->get('/', function (ServerRequest $request) {
-    $info = [
-        'method' => $request->getMethod(),
-        'uri' => $request->getUri()->getPath(),
-        'body' => $request->getBody()->getContents(),
-        'parsedBody' => $request->getParsedBody(),
-        'headers' => $request->getHeaders(),
-        'queryParameters' => $request->getQueryParams(),
-        'attributes' => $request->getAttributes(),
-    ];
+    $method  = $request->getMethod();
+    $uriPath = $request->getUri()->getPath();
+    $headers = $request->getHeaders();
+    $queryParameters = $request->getQueryParams();
+    $bodyContents    = $request->getBody()->getContents();
     // ...
 });
 
@@ -364,6 +337,51 @@ $router->get('/redirect', function () {
 });
 
 $router->dispatch();
+```
+
+### Views
+
+You might need to create a classic-style website that uses views.
+PhpRouter has a simple feature for working with PHP/HTML views.
+Look at the following example.
+
+```php
+use MiladRahimi\PhpRouter\Router;
+use MiladRahimi\PhpRouter\View\View
+
+$router = Router::create();
+
+// Setup view feature and set the directory of view files
+$router->setupView(__DIR__ . '/../views');
+
+$router->get('/profile', function (View $view) {
+    // It looks for a view with path: __DIR__/../views/profile.phtml
+    return $view->make('profile', ['user' => 'Jack']);
+});
+
+$router->get('/blog/post', function (View $view) {
+    // It looks for a view with path: __DIR__/../views/blog/post.phtml
+    return $view->make('blog.post', ['post' => $post]);
+});
+
+$router->dispatch();
+```
+
+There is also some points:
+* View files must have the ".phtml" extension (e.g. `profile.phtml`).
+* You can separate directories with `.` (e.g. `blog.post` for `blog/post.phtml`).
+
+View files are pure PHP or mixed with HTML.
+You should use PHP language with template style in the view files.
+This is a sample view file:
+
+```php
+<h1><?php echo $title ?></h1>
+<ul>
+    <?php foreach ($posts as $post): ?>
+        <li><?php echo $post['content'] ?></li>
+    <?php endforeach ?>
+</ul>
 ```
 
 ### Route Groups
@@ -493,51 +511,6 @@ $router->group(['domain' => '(.*).example.com'], function(Router $router) {
 });
 
 $router->dispatch();
-```
-
-### Views
-
-You might need to create a classic-style website that uses views.
-PhpRouter has a simple feature for working with PHP/HTML views.
-Look at the following example.
-
-```php
-use MiladRahimi\PhpRouter\Router;
-use MiladRahimi\PhpRouter\View\View
-
-$router = Router::create();
-
-// Setup view feature and set the directory of view files
-$router->setupView(__DIR__ . '/../views');
-
-$router->get('/profile', function (View $view) {
-    // It looks for a view with path: __DIR__/../views/profile.phtml
-    return $view->make('profile', ['user' => 'Jack']);
-});
-
-$router->get('/blog/post', function (View $view) {
-    // It looks for a view with path: __DIR__/../views/blog/post.phtml
-    return $view->make('blog.post', ['post' => $post]);
-});
-
-$router->dispatch();
-```
-
-There is also some points:
-* View files must have the ".phtml" extension (e.g. `profile.phtml`).
-* You must separate sub-directories with `.` (e.g. `blog.post` for `blog/post.phtml`).
-
-View files are pure PHP or mixed with HTML.
-You should use PHP language with template style in the view files.
-This is a sample view file:
-
-```php
-<h1><?php echo $title ?></h1>
-<ul>
-    <?php foreach ($posts as $post): ?>
-        <li><?php echo $post['content'] ?></li>
-    <?php endforeach ?>
-</ul>
 ```
 
 ### Route Names

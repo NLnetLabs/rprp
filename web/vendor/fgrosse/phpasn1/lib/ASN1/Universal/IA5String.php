@@ -23,9 +23,9 @@ class IA5String extends AbstractString
     public function __construct($string)
     {
         parent::__construct($string);
-//        for ($i = 1; $i < 128; $i++) {
-//            $this->allowCharacter(chr($i));
-//        }
+        for ($i = 1; $i < 128; $i++) {
+            $this->allowCharacter(chr($i));
+        }
     }
 
     public function getType()
