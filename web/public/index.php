@@ -172,6 +172,15 @@ $router->group(["domain" => "q([^-]*)-(.*)." . DOMAIN, "middleware" => [\koenvh\
     $router->any("/{i}/delta.xml", [\koenvh\RPKI\QController::class, "delta"]);
 });
 
+$router->group(["domain" => "r([^-]*)-(.*)." . DOMAIN, "middleware" => [\koenvh\RPKI\DumpHTTPRequest::class]], function(Router $router) {
+    $router->any("/tal.tal", [\koenvh\RPKI\RController::class, "tal"]);
+    $router->any("/koenvh-R.tal", [\koenvh\RPKI\RController::class, "tal"]);
+    $router->any("/ta/ta.cer", [\koenvh\RPKI\RController::class, "cer"]);
+    $router->any("/notification.xml", [\koenvh\RPKI\RController::class, "notification"]);
+    $router->any("/{uniqid}/snapshot.xml", [\koenvh\RPKI\RController::class, "snapshot"]);
+    $router->any("/{i}/delta.xml", [\koenvh\RPKI\RController::class, "delta"]);
+});
+
 try {
     $router->dispatch();
 } catch (\MiladRahimi\PhpRouter\Exceptions\InvalidCallableException $e) {
